@@ -8,13 +8,18 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+
+keywordlist = ["data", "machine learnning", " ml "]
+
 url = 'https://news.ycombinator.com/jobs'
 response = requests.get(url)
 html = response.content
 soup = BeautifulSoup(html,'lxml')
 #print(soup.prettify())
 urldict = {}
-keywordlist = ["data", "machine learnning", " ml "]
+
+
+
 for link in soup.find_all('a'):
 	#print(link.find(text=True))
 	body = str(link.find(text=True))
@@ -24,6 +29,7 @@ for link in soup.find_all('a'):
 			urldict[body] = "https://news.ycombinator.com/{}".format(link.get("href"))
 		else: 
 			urldict[body] = link.get("href")
+
 
 print(urldict)
 
