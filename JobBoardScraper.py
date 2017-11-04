@@ -1,8 +1,7 @@
-#scrape
-#look for data, MAchine learning, " ML "
-#Send email
 
+#!/Users/courthaworth/anaconda3/bin/python
 from bs4 import BeautifulSoup
+import sys
 import requests
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -12,7 +11,7 @@ from email.mime.text import MIMEText
 keywordlist = ["data", "machine learnning", " ml "]
 
 #Websites to pull postings from
-sitelist = ['https://news.ycombinator.com/jobs','https://icrunchdata.com/','https://jobs.dataelixir.com/','https://www.kaggle.com/jobs']
+sitelist = ['https://news.ycombinator.com/jobs','https://icrunchdata.com/','https://jobs.dataelixir.com/','https://www.kaggle.com/jobs','https://stackoverflow.com/jobs']
 
 urldict = {}
 
@@ -33,32 +32,53 @@ for url in sitelist:
 
 
 
-print(urldict)
+#print(urldict)
 
-hostaddress = input("Input Your Host address:")
-portnumber = int(input("Input your port:"))
+if(len(sys.argv)>2):
+	hostaddress = sys.argv[1]
+	portnumber = int(sys.argv[2])
+	MY_ADDRESS = sys.argv[3]
+	PASSWORD = sys.argv[4]
+	emailtxt = sys.argv[5]
+
+else:	
+	hostaddress = input("Input Your Host address:")
+	portnumber = int(input("Input your port:"))
+	MY_ADDRESS = input("Input Email address that will send email:")
+	PASSWORD = input("Input Password to said account: ")
+	emailtxt = None
 
 s = smtplib.SMTP(host=hostaddress, port=portnumber)
+print("connected")
 #s = smtplib.SMTP('localhost')
 s.starttls()
-MY_ADDRESS = input("Input Email address that will send email:")
-PASSWORD = input("Input Password to said account: ")
+
 
 s.login(MY_ADDRESS, PASSWORD)
+
+emaillist = []
+if(emailtxt is None):
+	emaillist.append(MY_ADDRESS)
+else:
+	with open(emailtxt,"r") as file:
+		for line in file:
+			emaillist.append(line)
 
 msg = MIMEMultipart()       # create a message
 
     # setup the parameters of the message
 msg['From']=MY_ADDRESS
-msg['To']=MY_ADDRESS
 msg['Subject']="Job Postings"
 
 # add in the message body
 for body, url in urldict.items():
-	text = "\n{}:\n{}".format(body,url)
+	text = "\n{}:\n{}\n".format(body,url)
 	msg.attach(MIMEText(text, 'plain'))
 
-# send the message via the server set up earlier.
-s.send_message(msg)
+for address in emaillist:
+	address = address.strip()
+	print(address)
+	msg['To']=address
+	s.send_message(msg)
     
 del msg
