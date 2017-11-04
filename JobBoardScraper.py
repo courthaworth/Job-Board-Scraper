@@ -8,27 +8,29 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-
+#Keywords to look for
 keywordlist = ["data", "machine learnning", " ml "]
 
-url = 'https://news.ycombinator.com/jobs'
-response = requests.get(url)
-html = response.content
-soup = BeautifulSoup(html,'lxml')
-#print(soup.prettify())
+#Websites to pull postings from
+sitelist = ['https://news.ycombinator.com/jobs','https://icrunchdata.com/','https://jobs.dataelixir.com/','https://www.kaggle.com/jobs']
+
 urldict = {}
 
+for url in sitelist:
+	response = requests.get(url)
+	html = response.content
+	soup = BeautifulSoup(html,'lxml')
+	#print(soup.prettify())
+	for link in soup.find_all('a'):
+		#print(link.find(text=True))
+		body = str(link.find(text=True))
+		if(any(substring in body.lower() for substring in keywordlist)):
+			print(body)
+			if(link.get("href").startswith("item")):
+				urldict[body] = "https://news.ycombinator.com/{}".format(link.get("href"))
+			else: 
+				urldict[body] = link.get("href")
 
-
-for link in soup.find_all('a'):
-	#print(link.find(text=True))
-	body = str(link.find(text=True))
-	if(any(substring in body.lower() for substring in keywordlist)):
-		print(body)
-		if(link.get("href").startswith("item")):
-			urldict[body] = "https://news.ycombinator.com/{}".format(link.get("href"))
-		else: 
-			urldict[body] = link.get("href")
 
 
 print(urldict)
