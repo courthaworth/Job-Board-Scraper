@@ -55,7 +55,10 @@ if(len(sys.argv)>2):
 	portnumber = int(sys.argv[2])
 	MY_ADDRESS = sys.argv[3]
 	PASSWORD = sys.argv[4]
-	emailtxt = sys.argv[5]
+	if(len(sys.argv)>5):
+		emailtxt = sys.argv[5]
+	else:
+		emailtxt = None
 
 else:	
 	hostaddress = input("Input Your Host address:")
