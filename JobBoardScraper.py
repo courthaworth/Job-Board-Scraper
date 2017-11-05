@@ -14,21 +14,37 @@ keywordlist = ["data", "machine learnning", " ml "]
 sitelist = ['https://news.ycombinator.com/jobs','https://icrunchdata.com/','https://jobs.dataelixir.com/','https://www.kaggle.com/jobs','https://stackoverflow.com/jobs']
 
 urldict = {}
-
+#FIX KAGGLE AND STACK OVERFLOW
 for url in sitelist:
 	response = requests.get(url)
 	html = response.content
 	soup = BeautifulSoup(html,'lxml')
 	#print(soup.prettify())
-	for link in soup.find_all('a'):
-		#print(link.find(text=True))
-		body = str(link.find(text=True))
-		if(any(substring in body.lower() for substring in keywordlist)):
-			print(body)
-			if(link.get("href").startswith("item")):
-				urldict[body] = "https://news.ycombinator.com/{}".format(link.get("href"))
-			else: 
-				urldict[body] = link.get("href")
+	if("stack" in url):
+		for link in soup.find_all("a",{"class":"job-link"}):
+			body = link.text.strip()
+			if(any(substring in body.lower() for substring in keywordlist)):
+				print(body)
+				urldict[body] = "https://stackoverflow.com{}".format(link.get("href"))
+
+	else:
+		for link in soup.find_all('a'):
+			if( "kaggle" in url):
+				body = link.find("div",{"class":"position"})
+				if(body is None):
+					continue
+				else:
+					body = body.text.strip()
+			else:
+				body = str(link.find(text=True))
+			if(any(substring in body.lower() for substring in keywordlist)):
+				#print(body)
+				if(link.get("href").startswith("item")):
+					urldict[body] = "https://news.ycombinator.com/{}".format(link.get("href"))
+				elif(link.get("href").startswith("/jobs")):
+					urldict[body] = "https://kaggle.com{}".format(link.get("href"))
+				else: 
+					urldict[body] = link.get("href")
 
 
 
@@ -69,16 +85,13 @@ msg = MIMEMultipart()       # create a message
     # setup the parameters of the message
 msg['From']=MY_ADDRESS
 msg['Subject']="Job Postings"
-
+msg['To']=",".join(emaillist)
 # add in the message body
 for body, url in urldict.items():
 	text = "\n{}:\n{}\n".format(body,url)
 	msg.attach(MIMEText(text, 'plain'))
+	
 
-for address in emaillist:
-	address = address.strip()
-	print(address)
-	msg['To']=address
-	s.send_message(msg)
+s.send_message(msg)
     
 del msg
