@@ -7,4 +7,9 @@ When running this script, you will need to input outgoing mail host(ex. smtpauth
 
 The functionality to use command line arguments has been implemented. Running this file in the command line, followed by your hostname, port, email address, password then you wont have to input them as the file is running. This is useful if you are always going to be using the same information when you run it, or you wish to automate the process using launchd, or similar functionality. There is an optional fifth emailaddress txt file list if you wish to send the email to multiple addresses. The desired format for such a file is just one email address per line.
 
+<<<<<<< HEAD
 Most of these job boards do not update every day so there will be substantial repetition. I have set this up on my computer to run every 24 hours automatically but this can be configured however. On a mac, it is easy to set up this functionality using launchd, and launch control if you need help debugging. When I have time I will likely post a tutorial on this automation.
+=======
+
+Most of these job boards do not update every day so there will be substantial repetition. I have set this up on my computer to run every 24 hours automatically but this can be configured however. On a mac, it is easy to set up this functionality using launchd, and launch control if you need help debugging. When I have time I will likely post a tutorial on this automation.
+>>>>>>> c04c66dc8b71ffe1a63b18f9ecea5fba215518cc
