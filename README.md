@@ -9,6 +9,3 @@ The functionality to use command line arguments has been implemented. Running th
 
 
 Most of these job boards do not update every day so there will be substantial repetition. I have set this up on my computer to run every 24 hours automatically but this can be configured however. On a mac, it is easy to set up this functionality using launchd, and launch control if you need help debugging. When I have time I will likely post a tutorial on this automation.
-
-
-Most of these job boards do not update every day so there will be substantial repetition. I have set this up on my computer to run every 24 hours automatically but this can be configured however. On a mac, it is easy to set up this functionality using launchd, and launch control if you need help debugging. When I have time I will likely post a tutorial on this automation.
