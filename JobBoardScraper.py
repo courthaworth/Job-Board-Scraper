@@ -8,7 +8,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 #Keywords to look for
-keywordlist = ["data", "machine learnning", " ml "]
+keywordlist = ["data", "machine learning", " ml "]
 
 #Websites to pull postings from
 sitelist = ['https://news.ycombinator.com/jobs','https://icrunchdata.com/','https://jobs.dataelixir.com/','https://www.kaggle.com/jobs','https://stackoverflow.com/jobs']
